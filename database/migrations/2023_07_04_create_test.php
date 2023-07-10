@@ -9,13 +9,12 @@
         function __construct()
         {
             $this->db = createDB();
+            $this->migrationSchema = new migrationSchema();
         }
 
         public function up()
         {
-            $migrationSchema = new migrationSchema();
-
-            $sql = $migrationSchema->create('test')
+            $sql = $this->migrationSchema->create('test')
                 ->addPk('id', 'INT(11)', 1)
                 ->addColumn('username', 'VARCHAR(50)')
                 ->addColumn('password', 'VARCHAR(255)')
@@ -25,6 +24,8 @@
 
         public function down()
         {
-
+            $sql = $this->migrationSchema->drop('test')
+                ->compile();
+            $this->db->query($sql);
         }
     }

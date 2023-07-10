@@ -9,13 +9,12 @@ class Migration
     function __construct()
     {
         $this->db = createDB();
+        $this->migrationSchema = new migrationSchema();
     }
 
     public function up()
     {
-        $migrationSchema = new migrationSchema();
-
-        $sql = $migrationSchema->addSingleColumn('test', 'add_column', 'varchar(50)')
+        $sql = $this->migrationSchema->addSingleColumn('test', 'add_column', 'varchar(50)')
             ->compile();
 
         $this->db->query($sql);
@@ -23,6 +22,9 @@ class Migration
 
     public function down()
     {
+        $sql = $this->migrationSchema->dropColumn('test', 'add_column')
+            ->compile();
 
+        $this->db->query($sql);
     }
 }

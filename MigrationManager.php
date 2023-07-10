@@ -38,6 +38,27 @@
             return $data;
         }
 
+        public function maxMigrationList()
+        {
+            $data = array();
+            $q = " SELECT * FROM migrations WHERE batch = (SELECT MAX(batch) AS max_batch FROM migrations)";
+            $res = $this->db->query($q);
+            if($this->db->numRows($res)>0)
+            {
+                while ($row = $this->db->fetchArray($res))
+                {
+                    $data[] = array(
+                        'id' => $row['id'],
+                        'migration' => $row['migration'],
+                        'batch' => $row['batch'],
+                        'created_at' => $row['created_at'],
+                    );
+                }
+            }
+
+            return $data;
+        }
+
         public function migrationSetting($migration)
         {
             // Check if the migrations table exists
@@ -56,7 +77,7 @@
                 $this->db->execQuery($q);
             }
 
-            $q = " SELECT max(batch) as max_batch FROM migrations WHERE migration='$migration' ";
+            $q = " SELECT max(batch) as max_batch FROM migrations ";
             $row = $this->db->querySingleRow($q);
 
             $batch = $row['max_batch'] + 1;
@@ -67,12 +88,7 @@
             $this->db->execQuery($q);
         }
 
-        public function migrationStart()
-        {
-
-        }
-
-        public function migrationRollback()
+        public function migrationRollbackSetting()
         {
 
         }

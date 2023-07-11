@@ -64,11 +64,41 @@
             return $this;
         }
 
+        public function addMultipleColumns($table, $columns)
+        {
+            $this->reset();
+            $this->query->base = "ALTER TABLE $table";
+            $this->query->type = 'alter';
+
+            $cols = [];
+            foreach ($columns as $column => $type) {
+                $cols[] = "ADD $column $type";
+            }
+            $this->query->base .= " " . implode(", ", $cols);
+
+            return $this;
+        }
+
         public function dropColumn($table, $column)
         {
             $this->reset();
             $this->query->base = "ALTER TABLE $table DROP COLUMN $column";
             $this->query->type = 'alter';
+            return $this;
+        }
+
+        public function dropMultipleColumns($table, $columns)
+        {
+            $this->reset();
+            $this->query->base = "ALTER TABLE $table";
+            $this->query->type = 'alter';
+
+            $cols = [];
+            foreach ($columns as $column) {
+                $cols[] = "DROP COLUMN $column";
+            }
+            $this->query->base .= " " . implode(", ", $cols);
+
             return $this;
         }
 

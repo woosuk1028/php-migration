@@ -1,11 +1,11 @@
 <?php
-    include_once(dirname(__FILE__)."/../lib/common.php");
+    include_once(dirname(__FILE__)."/../wapi/lib/common.php");
     include_once _XWLIB_HOME.'/MigrationManager.php';
     include_once _XWLIB_HOME.'/MigrationSchema.php';
 
     $today = date("Y-m-d H:i:s");
     $date = date("Y-m-d");
-
+    
     $migrationManager = new MigrationManager();
 
     $migrationList = $migrationManager->maxMigrationList();
@@ -33,8 +33,11 @@
             {
                 $migrationManager->migrationRollbackSetting($val['name']);
 
+                $exp_name = explode(".", $val['name']);
+                $class_name = "Migration_".$exp_name[0];
+
                 include $dir . $val['name'];
-                $migration = new Migration();
+                $migration = new $class_name();
                 $migration->down();
             }
         }

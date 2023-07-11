@@ -1,16 +1,18 @@
 <?php
-    include_once(dirname(__FILE__)."/../lib/common.php");
+    include_once(dirname(__FILE__)."/../wapi/lib/common.php");
     include_once _XWLIB_HOME.'/MigrationManager.php';
     include_once _XWLIB_HOME.'/MigrationSchema.php';
 
     $db = createDB();
 
     $today = date("Y-m-d H:i:s");
-    $date = date("Y-m-d");
-
+    $date = date('Y_m_d');
+    
     $migrationManager = new MigrationManager();
 
     $migrationList = $migrationManager->migrationList();
+    $maxMigrationBatch = $migrationManager->maxMigrationBatch();
+    $batch = $maxMigrationBatch + 1;
 
     $dir = 'migrations/';
     $files = array_diff(scandir($dir), array('.', '..'));
@@ -28,6 +30,7 @@
 
     foreach($files as $key => $val)
     {
+
         $alreadyMigrated = false;
         foreach($migrationList as $key2 => $val2)
         {
@@ -40,11 +43,15 @@
 
         if(!$alreadyMigrated)
         {
-            $migrationManager->migrationSetting($val['name']);
+            $migrationManager->migrationSetting($val['name'], $batch);
+
+            $exp_name = explode(".", $val['name']);
+            $class_name = "Migration_".$exp_name[0];
 
             include $dir . $val['name'];
-            $migration = new Migration();
+            $migration = new $class_name();
             $migration->up();
+            unset($migration);
         }
     }
 

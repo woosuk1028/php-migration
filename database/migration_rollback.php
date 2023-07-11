@@ -5,7 +5,7 @@
 
     $today = date("Y-m-d H:i:s");
     $date = date("Y-m-d");
-    
+
     $migrationManager = new MigrationManager();
 
     $migrationList = $migrationManager->maxMigrationList();
@@ -39,6 +39,8 @@
                 include $dir . $val['name'];
                 $migration = new $class_name();
                 $migration->down();
+                echo $class_name." Rollback Success.";
+                unset($migration);
             }
         }
     }

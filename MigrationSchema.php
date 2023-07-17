@@ -102,10 +102,15 @@
             return $this;
         }
 
-        public function addIndex($table, $column)
+        public function addIndex($table, $columns)
         {
             $this->reset();
-            $this->query->base = "ALTER TABLE $table ADD INDEX ($column)";
+
+            if(is_array($columns)) {
+                $columns = implode(", ", $columns);
+            }
+
+            $this->query->base = "ALTER TABLE $table ADD INDEX ($columns)";
             $this->query->type = 'alter';
             return $this;
         }

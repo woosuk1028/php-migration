@@ -15,7 +15,16 @@ class Migration_2023_07_12_attendance_index
         $sql = $this->migrationSchema->addIndex("tb_attendance_history",[
             "app_key",
             "user_key"
-        ]);
+        ])->compile();
+
+        $this->db->query($sql);
+
+        $sql = $this->migrationSchema->addIndex("tb_attendance_history",[
+            "app_key",
+            "login_key"
+        ])->compile();
+
+        $this->db->query($sql);
     }
 
     public function down()

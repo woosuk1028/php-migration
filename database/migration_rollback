@@ -37,7 +37,7 @@
                 include $dir . $val['name'];
                 $migration = new $class_name();
                 $migration->down();
-                echo $class_name." Rollback Success.";
+                echo $class_name." Rollback Success.\n";
                 unset($migration);
             }
         }

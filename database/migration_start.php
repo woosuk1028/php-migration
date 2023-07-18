@@ -51,7 +51,7 @@
             include $dir . $val['name'];
             $migration = new $class_name();
             $migration->up();
-            echo $class_name." Migration Success.";
+            echo $class_name." Migration Success.\n";
             unset($migration);
         }
     }

@@ -5,7 +5,7 @@
     class MigrationManager
     {
         private $db;
-
+    
         function __construct()
         {
             $this->db = createDB();
@@ -85,11 +85,11 @@
             // If the migrations table doesn't exist, create it
             if(!$tableExists) {
                 $q = " CREATE TABLE migrations (
-                                id INT AUTO_INCREMENT PRIMARY KEY,
-                                migration VARCHAR(255) NOT NULL,
-                                batch INT NOT NULL,
-                                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                            ); ";
+                                    id INT AUTO_INCREMENT PRIMARY KEY,
+                                    migration VARCHAR(255) NOT NULL,
+                                    batch INT NOT NULL,
+                                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                                ); ";
                 $this->db->execQuery($q);
             }
 
@@ -102,5 +102,5 @@
             $q = $h->getInsertQuery('migrations');
             $this->db->execQuery($q);
         }
-        
+
     }

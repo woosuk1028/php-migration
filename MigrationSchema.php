@@ -47,19 +47,32 @@
             return $this;
         }
 
-        public function addColumn($column, $type)
+        public function addColumn($column, $type, $comment="", $after="")
         {
             if (!isset($this->query->columns)) {
                 $this->query->columns = [];
             }
-            $this->query->columns[] = "$column $type";
+            if(!empty($comment))
+                $comment = " COMMENT '$comment' ";
+
+            if(!empty($after))
+                $after = " AFTER $after ";
+
+            $this->query->columns[] = "$column $type $comment $after ";
             return $this;
         }
 
-        public function addSingleColumn($table, $column, $type)
+        public function addSingleColumn($table, $column, $type, $comment="", $after="")
         {
             $this->reset();
-            $this->query->base = "ALTER TABLE $table ADD $column $type";
+
+            if(!empty($comment))
+                $comment = " COMMENT '$comment' ";
+
+            if(!empty($after))
+                $after = " AFTER $after ";
+
+            $this->query->base = "ALTER TABLE $table ADD $column $type $comment $after";
             $this->query->type = 'alter';
             return $this;
         }
